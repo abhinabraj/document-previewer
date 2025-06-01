@@ -52,8 +52,9 @@ export default function Sidebar({
           <span>Regular Fields</span>
         </div>
         <div className="tab-content">
-          {sections.map((data) => (
+          {sections.map((data, index) => (
             <ContentSection
+              key={index}
               sectionData={data}
               onCheckboxClick={handleCheckboxClick}
               selectedSection={selectedSection}

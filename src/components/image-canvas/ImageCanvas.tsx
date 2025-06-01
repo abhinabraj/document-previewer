@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import documentImage from "../../assets/data/pages/a2cbec1124234a6d846f908ba9531a2e-1.jpg";
 import type { SelectedSection } from "../../interface/section.interface";
+import Select from "../Select";
 
-const CANVAS_HEIGHT = 950;
+const CANVAS_HEIGHT = 930;
 const CANVAS_WIDTH = 900;
 
 interface Props {
@@ -103,6 +104,26 @@ export default function ImageCanvas({ selectedSection }: Props) {
   const zoomIn = () => setZoom((z) => Math.min(z + 0.1, 5));
   const zoomOut = () => setZoom((z) => Math.max(z - 0.1, 0.1));
 
+  const resetToFit = () => {
+    if (!docImage || !canvasRef.current) return;
+
+    const scale = Math.min(
+      canvasRef.current.width / docImage.naturalWidth,
+      canvasRef.current.height / docImage.naturalHeight
+    );
+
+    setZoom(1); // reset zoom to neutral
+    setBaseScale(scale);
+
+    const imageWidth = docImage.naturalWidth * scale;
+    const imageHeight = docImage.naturalHeight * scale;
+
+    setOffset({
+      x: (canvasRef.current.width - imageWidth) / 2,
+      y: (canvasRef.current.height - imageHeight) / 2,
+    });
+  };
+
   const handleWheel = (e: React.WheelEvent) => {
     if (!docImage || !canvasRef.current) return;
     e.preventDefault();
@@ -143,7 +164,8 @@ export default function ImageCanvas({ selectedSection }: Props) {
   const onMouseUp = () => setIsDragging(false);
 
   return (
-    <div className="image-preview p-5 flex justify-center items-center relative">
+    <div className="image-preview flex flex-col items-center relative">
+      <Select setZoom={setZoom} resetToFit={resetToFit} />
       <canvas
         ref={canvasRef}
         width={CANVAS_WIDTH}

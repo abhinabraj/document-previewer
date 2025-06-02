@@ -1,16 +1,28 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import documentImage from "../../assets/data/pages/a2cbec1124234a6d846f908ba9531a2e-1.jpg";
-import type { SelectedSection } from "../../interface/section.interface";
+import type {
+  Section,
+  SelectedSection,
+} from "../../interface/section.interface";
+
 import Select from "../Select";
 
 const CANVAS_HEIGHT = 930;
 const CANVAS_WIDTH = 900;
 
 interface Props {
+  allSections: Section[];
   selectedSection: SelectedSection[];
+  hoveredSectionId: number | null;
+  setHoveredSectionId: (id: number | null) => void;
 }
 
-export default function ImageCanvas({ selectedSection }: Props) {
+export default function ImageCanvas({
+  allSections,
+  selectedSection,
+  hoveredSectionId,
+  setHoveredSectionId,
+}: Props) {
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [docImage, setDocImage] = useState<HTMLImageElement | null>(null);
@@ -70,7 +82,7 @@ export default function ImageCanvas({ selectedSection }: Props) {
   }, [docImage, baseScale, context, zoom, offset]);
 
   const highlightImage = useCallback(
-    (position: number[]) => {
+    (position: number[], isHover: boolean = false) => {
       const [x1, y1, x2, y2] = position;
       if (!docImage || !canvasRef.current) return;
 
@@ -82,8 +94,10 @@ export default function ImageCanvas({ selectedSection }: Props) {
       const boxHeight = (y2 - y1) * finalScale;
 
       if (context) {
-        context.strokeStyle = "red";
-        context.fillStyle = "rgba(255, 0, 0, 0.3)";
+        context.strokeStyle = isHover ? "blue" : "red";
+        context.fillStyle = isHover
+          ? "rgba(0, 0, 255, 0.2)"
+          : "rgba(255, 0, 0, 0.3)";
 
         context.fillRect(boxX, boxY, boxWidth, boxHeight);
         context.strokeRect(boxX, boxY, boxWidth, boxHeight);
@@ -96,10 +110,21 @@ export default function ImageCanvas({ selectedSection }: Props) {
     if (!docImage || !context) return;
     context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     drawImage();
-    selectedSection.forEach((section) => {
-      highlightImage(section.position);
+    allSections.forEach((section) => {
+      const isHover = hoveredSectionId === section.id;
+      if (selectedSection.some((s) => s.id === section.id) || isHover) {
+        highlightImage(section.content?.position ?? [], isHover);
+      }
     });
-  }, [docImage, selectedSection, context, drawImage, highlightImage]);
+  }, [
+    docImage,
+    selectedSection,
+    context,
+    hoveredSectionId,
+    allSections,
+    drawImage,
+    highlightImage,
+  ]);
 
   const zoomIn = () => setZoom((z) => Math.min(z + 0.1, 5));
   const zoomOut = () => setZoom((z) => Math.max(z - 0.1, 0.1));
@@ -112,7 +137,7 @@ export default function ImageCanvas({ selectedSection }: Props) {
       canvasRef.current.height / docImage.naturalHeight
     );
 
-    setZoom(1); // reset zoom to neutral
+    setZoom(1);
     setBaseScale(scale);
 
     const imageWidth = docImage.naturalWidth * scale;
@@ -154,11 +179,42 @@ export default function ImageCanvas({ selectedSection }: Props) {
   };
 
   const onMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    const dx = e.clientX - dragStart.current.x;
-    const dy = e.clientY - dragStart.current.y;
-    dragStart.current = { x: e.clientX, y: e.clientY };
-    setOffset((prev) => ({ x: prev.x + dx, y: prev.y + dy }));
+    if (!docImage || !canvasRef.current) return;
+
+    if (isDragging) {
+      const dx = e.clientX - dragStart.current.x;
+      const dy = e.clientY - dragStart.current.y;
+      dragStart.current = { x: e.clientX, y: e.clientY };
+      setOffset((prev) => ({ x: prev.x + dx, y: prev.y + dy }));
+    } else {
+      let found = false;
+      const rect = canvasRef.current.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const finalScale = zoom * baseScale;
+
+      allSections.forEach((section) => {
+        const [x1, y1, x2, y2] = section.content?.position ?? [];
+        const boxX = x1 * finalScale + offset.x;
+        const boxY = y1 * finalScale + offset.y;
+        const boxWidth = (x2 - x1) * finalScale;
+        const boxHeight = (y2 - y1) * finalScale;
+        if (
+          mouseX > boxX &&
+          mouseX <= boxX + boxWidth &&
+          mouseY >= boxY &&
+          mouseY <= boxY + boxHeight
+        ) {
+          setHoveredSectionId(section.id);
+          found = true;
+        }
+      });
+
+      if (!found) {
+        setHoveredSectionId(null);
+      }
+    }
   };
 
   const onMouseUp = () => setIsDragging(false);
@@ -175,7 +231,7 @@ export default function ImageCanvas({ selectedSection }: Props) {
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
       ></canvas>
-      <div className="absolute bottom-24 right-16 dark:bg-slate-950 flex flex-col items-center rounded-full">
+      <div className="absolute bottom-24 right-16 bg-slate-200 dark:bg-slate-950 flex flex-col items-center rounded-full">
         <span
           onClick={zoomOut}
           className="px-4 py-2  dark:text-white text-2xl cursor-pointer"

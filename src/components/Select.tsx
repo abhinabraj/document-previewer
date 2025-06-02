@@ -15,7 +15,7 @@ export default function Select({ setZoom, resetToFit }: Props) {
 
   return (
     <select
-      className="dark:bg-slate-600 dark:text-white p-3 self-end m-3 w-[200px]"
+      className="bg-slate-200 dark:bg-slate-600 dark:text-white p-3 self-end m-3 w-[200px]"
       onChange={handleChange}
     >
       <option value="0">Fit to screen</option>

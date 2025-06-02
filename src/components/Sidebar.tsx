@@ -110,7 +110,7 @@ export default function Sidebar({
           setIsConfirmOpen(false);
         }}
       >
-        <div>Are you sure you want to remove the selected sections?</div>
+        <div>Are you sure you want to confirm the selected sections?</div>
         <div className="text-sm">
           {selectedSection.length} fields are selected
         </div>

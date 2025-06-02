@@ -231,7 +231,7 @@ export default function ImageCanvas({
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
       ></canvas>
-      <div className="absolute bottom-24 right-16 bg-slate-200 dark:bg-slate-950 flex flex-col items-center rounded-full">
+      <div className="absolute bottom-24 right-16 bg-slate-200 dark:bg-slate-800 flex flex-col items-center rounded-full">
         <span
           onClick={zoomOut}
           className="px-4 py-2  dark:text-white text-2xl cursor-pointer"

@@ -53,7 +53,7 @@ export default function ContentSection({
 
         <div className="dark:text-white text-gray-700">
           <div className="font-medium leading-none">{sectionData.label}</div>
-          <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <div className="text-sm text-gray-500 dark:text-gray-100 mt-1">
             {sectionData.content?.value}
           </div>
         </div>
@@ -62,6 +62,7 @@ export default function ContentSection({
       <div className="flex gap-2 items-center">
         <input
           type="checkbox"
+          aria-label="checkbox to select field"
           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-slate-700 dark:border-gray-600"
           onChange={() => onCheckboxClick(sectionData.id)}
           checked={selectedSection

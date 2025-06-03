@@ -87,14 +87,15 @@ export default function Sidebar({
       <div className="pt-4 px-3 border-t mt-2 flex justify-between">
         <div className="bg-slate-200 dark:bg-slate-600 p-3 dark:text-white text-gray-700 flex gap-2 items-center cursor-pointer">
           <input
+            aria-label="Select all"
             type="checkbox"
-            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-slate-700 dark:border-gray-600"
+            className="w-4 h-4 text-blue-600 bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-slate-700 dark:border-gray-600"
             onChange={handleSelectAll}
           />
           Select all
         </div>
         <button
-          className="bg-slate-200 dark:bg-slate-600 p-3 dark:text-white text-gray-700 ml-3 min-w-28 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-slate-200 dark:bg-slate-600 p-3 dark:text-white text-gray-700 ml-3 min-w-28 cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed"
           onClick={handleConfirm}
           disabled={selectedSection.length <= 1}
         >

@@ -1,3 +1,44 @@
+# Document Previewer
+
+A simple document previewer built with React and TypeScript, where we can visualize the structure of a document and select specific sections to highlight.
+
+## Features
+
+- Displays the structure of a document with different sections
+- Allows users to select specific sections to highlight
+- Provides zoom functionality to zoom in and out
+- Provides a reset button to reset the zoom and fit the document to the screen
+
+## Installation
+
+1. Clone the repository
+2. Install dependencies using `yarn`
+3. Run the application using `yarn dev`
+
+## Usage
+
+1. Open the application in your browser
+3. Select the sections you want to highlight
+4. Zoom in and out using the zoom controls
+5. Reset the zoom and fit the document to the screen using the reset button
+
+## Packages used
+
+### Tailwind CSS
+
+[Tailwind CSS](https://tailwindcss.com/) is a utility-first CSS framework that allows you to style your application with a set of pre-defined classes. It provides a wide range of utility classes, such as `text-gray-500`, `bg-blue-500`, `rounded-lg`, and `p-4`. It is used to in this project to quickly style the application.
+
+### React Icons
+
+[React Icons](https://react-icons.github.io/react-icons/) is a library of icons that can be used in React applications. It provides a set of SVG icons that can be easily integrated into your application. In this project, we use it to display the "more" icon in the sidebar.
+
+
+
+
+
+
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

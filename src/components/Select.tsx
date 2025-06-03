@@ -15,6 +15,7 @@ export default function Select({ setZoom, resetToFit }: Props) {
 
   return (
     <select
+      aria-label="Select zoom level"
       className="bg-slate-200 dark:bg-slate-600 dark:text-white p-3 self-end m-3 w-[200px]"
       onChange={handleChange}
     >

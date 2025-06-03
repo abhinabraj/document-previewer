@@ -32,10 +32,8 @@ A simple document previewer built with React and TypeScript, where we can visual
 
 [React Icons](https://react-icons.github.io/react-icons/) is a library of icons that can be used in React applications. It provides a set of SVG icons that can be easily integrated into your application. In this project, we use it to display the "more" icon in the sidebar.
 
-
-
-
-
+## Google Lighthouse Insight
+![image](https://github.com/user-attachments/assets/c81b7d3f-8e30-4dcb-a4c0-c8df2d3f1d83)
 
 
 
